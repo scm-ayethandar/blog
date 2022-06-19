@@ -4,13 +4,30 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\User;
 use App\Http\Requests\PostRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
     public function index()
     {
+        // Auth::attempt(['email'=>'---', 'password'=>'---']);
+
+        // User::where('id', 5)->first();  //User::find(5);
+        // Auth::login($user);
+
+        // Auth::loginUsingId(4);
+
+        // if(Auth::check()) {
+        //     return 'Logged In';
+        // } else {
+        //     return 'Not Logged In';
+        // }
+
+        // $user = Auth::user();
+
         $posts = Post::all();
 
         return view('posts.index', compact('posts'));
