@@ -11,9 +11,11 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
+                    @auth
                     <li class="nav-item">
                         <a class="nav-link" href="/posts/create">Create A Post</a>
                     </li>
+                    @endauth
                     @if(Auth::check()) 
                     <li class="nav-item">
                     <li class="nav-item dropdown">

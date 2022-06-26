@@ -28,7 +28,8 @@ class PostController extends Controller
 
         // $user = Auth::user();
 
-        $posts = Post::all();
+        // $posts = Post::all();
+        $posts = Post::paginate(5);
 
         return view('posts.index', compact('posts'));
     }
@@ -52,12 +53,21 @@ class PostController extends Controller
             ->withInput();
         }
 
-        $post = new Post();
-        $post->title = request('title');
-        $post->body = request('body');
-        $post->created_at = now();
-        $post->updated_at = now();
-        $post->save();
+        // $post = new Post();
+        // $post->title = request('title');
+        // $post->body = request('body');
+        // $post->created_at = now();
+        // $post->updated_at = now();
+        // $post->save();
+
+        Post::create([
+            'title' => $request->title,
+            'body' => $request->body,
+            
+        ]);
+
+        // $request->session()->flash('success', 'A post was created successfully.');
+        session()->flash('success', 'A post was created successfully.');
 
         return redirect('/posts');
     }
@@ -80,13 +90,22 @@ class PostController extends Controller
     {
         
         $post = Post::find($id);
-        $post->title = request('title');
-        $post->body = request('body');
-        $post->updated_at = now();
-        $post->save();
+        // $post->title = request('title');
+        // $post->body = request('body');
+        // $post->updated_at = now();
+        // $post->save();
+
+        // $post->update([
+        //     'title' => $request->title,
+        //     'body' => $request->body,
+        // ]);
+
+        $post->update($request->only(['title', 'body']));
+
+        // session()->flash('success', 'A post was updated successfully.');
 
         // return "Updated post";
-        return redirect('/posts');
+        return redirect('/posts')->with('success', 'A post was updated successfully.');
     }
 
     public function destroy($id)
@@ -94,7 +113,7 @@ class PostController extends Controller
         Post::destroy($id);
 
         // return "Deleted Post";
-        return redirect('/posts');
+        return redirect('/posts')->with('success', 'A post was deleted.');
     }
 
 }

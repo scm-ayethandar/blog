@@ -16,17 +16,21 @@ use App\Http\Controllers\LoginController;
 |
 */
 
-// Route::get('/posts', [PostController::class, 'index']);
-// Route::get('/posts/create', [PostController::class, 'create']);
-// Route::post('/posts/store', [PostController::class, 'store']);
+// Route::get('test', function() {
+//     \App\Models\Post::factory(3)->create();
+// });
 
-// Route::get('/posts/edit/{id}', [PostController::class, 'edit']);
-// Route::put('/posts/update/{id}', [PostController::class, 'update']);
+Route::get('/posts', [PostController::class, 'index']);
+Route::get('/posts/create', [PostController::class, 'create'])->middleware('myauth');
+Route::post('/posts/store', [PostController::class, 'store'])->middleware('myauth');
 
-// Route::get('/posts/show/{id}', [PostController::class, 'show']);
-// Route::delete('/posts/delete/{id}', [PostController::class, 'destroy']);
+Route::get('/posts/edit/{id}', [PostController::class, 'edit'])->middleware('myauth');
+Route::put('/posts/update/{id}', [PostController::class, 'update'])->middleware('myauth');
 
-Route::resource('posts', PostController::class);
+Route::get('/posts/show/{id}', [PostController::class, 'show']);
+Route::delete('/posts/delete/{id}', [PostController::class, 'destroy'])->middleware('myauth');
+
+// Route::resource('posts', PostController::class);
 // Route::get('master', function)
 Route::get('register', [RegisterController::class, 'create']);
 Route::post('register', [RegisterController::class, 'store']);
