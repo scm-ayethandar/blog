@@ -19,7 +19,13 @@
             <!-- @dump($post) -->
             <!-- {{$post->created_at->format('M d, Y')}} by Mark -->
             <!-- {{$post->created_at->toDateTimeString()}} by Mark -->
-            {{$post->created_at->diffForHumans()}} by Mark
+            <i>{{$post->created_at->diffForHumans()}}</i> by 
+            <!-- @php
+                $userId = $post->user_id;
+                $user = \App\Models\User::find($userId);
+                echo $user->name;
+            @endphp -->
+            {{ $post->user->name }}
             <p>{{ $post->body }}</p>
             @auth
             <div class="d-flex justify-content-end">
