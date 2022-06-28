@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+
+
         // Auth::attempt(['email'=>'---', 'password'=>'---']);
 
         // User::where('id', 5)->first();  //User::find(5);
@@ -29,7 +32,19 @@ class PostController extends Controller
         // $user = Auth::user();
 
         // $posts = Post::all();
-        $posts = Post::paginate(5);
+
+        // $posts = Post::select(['posts.*', 'users.name'])
+        //          ->join('users', 'users.id', '=', 'posts.user_id')
+        //          ->get()->toArray();
+
+        // $posts = Post::select(['posts.*', 'users.name as author'])
+        //          ->join('users', 'users.id', '=', 'posts.user_id')
+        //          ->orderBy('id', 'desc')
+        //          ->paginate(5);
+
+        // $posts = DB::table('posts')->join('users', 'users.id', '=', 'posts.user_id')->first();
+
+        $posts = Post::where('title', 'like', '%', $request->search, '%')->orderBy('id', 'desc')->paginate(5);
 
         return view('posts.index', compact('posts'));
     }
@@ -39,7 +54,7 @@ class PostController extends Controller
         return view('posts.create');
     }
 
-    public function store(Request $request)
+    public function store(PostRequest $request)
     { 
 
         $validator = Validator::make($request->all(), [
@@ -63,7 +78,7 @@ class PostController extends Controller
         Post::create([
             'title' => $request->title,
             'body' => $request->body,
-            
+            'user_id' =>Auth::id(),  //auth()->id()
         ]);
 
         // $request->session()->flash('success', 'A post was created successfully.');
@@ -81,7 +96,16 @@ class PostController extends Controller
 
     public function edit($id)
     {
-        $post = Post::find($id);
+        // $post = Post::find($id);
+
+        $post = Post::select(['posts.*', 'users.name as author'])
+                ->join('users', 'user_id', 'posts.user_id')
+                ->where('posts.id', $id)
+                ->first();
+
+                // $post = Post::select(['posts.*', 'users.name as author'])
+                // ->join('users', 'user_id', 'posts.user_id')
+                // ->find($id);
 
         return view('posts.edit', compact('post'));
     }

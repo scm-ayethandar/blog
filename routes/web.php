@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MyPostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +26,8 @@ Route::get('/posts/create', [PostController::class, 'create'])->middleware('myau
 Route::post('/posts/store', [PostController::class, 'store'])->middleware('myauth');
 
 Route::get('/posts/edit/{id}', [PostController::class, 'edit'])->middleware('myauth');
-Route::put('/posts/update/{id}', [PostController::class, 'update'])->middleware('myauth');
+Route::put('/posts/{id}', [PostController::class, 'update'])->middleware('myauth');
+Route::patch('/posts/{id}', [PostController::class, 'update']);
 
 Route::get('/posts/{id}', [PostController::class, 'show']);
 Route::delete('/posts/delete/{id}', [PostController::class, 'destroy'])->middleware('myauth');
@@ -38,3 +40,5 @@ Route::post('register', [RegisterController::class, 'store']);
 Route::get('login', [LoginController::class, 'create']);
 Route::post('login', [LoginController::class, 'store']);
 Route::post('logout', [LoginController::class, 'destroy']);
+
+Route::get('/my_posts', [MyPostController::class, 'index']);
