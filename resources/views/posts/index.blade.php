@@ -49,13 +49,30 @@
                     <i>{{ $post->created_at->diffForHumans() }}</i> by
                     {{-- <b> {{ $post->author }} </b> --}}
                     {{-- <b>{{ $post->user()->first()->name }}</b> --}}
-                    <b>{{ $post->author->name }}</b>
-                    <p>{{ $post->body }}</p> (category 1, category 2)
+                    <b>{{ $post->author }}</b>
+                    <p>{{ $post->body }}</p>
+                    <!-- <p>{{ $post->category }}</p> -->
+                    <?php 
+                        $categories = App\Models\Category::select(['categories.id', 'categories.name'])
+                        ->whereIn('categories.id', Illuminate\Support\Facades\DB::table('category_post')
+                        ->select('category_post.category_id')
+                        ->where('category_post.post_id', $post->id))
+                        ->get();
+                    ?>
+                    Categories:
+                     @foreach($categories as $category)
+                            <span><i>{{ $category->name }}</i></span>
+                     @endforeach
+                    <!-- @if($post->categories)
+                        @foreach($post->categories as $category)
+                            <span>{{ $category->name }}</span>
+                        @endforeach
+                    @endif -->
                     {{-- @if(Auth::check() && $post->user_id == Auth::id()) --}}
                     @if($post->isOwnPost())
                     <div class="d-flex justify-content-end">
                         <a href="/posts/edit/{{ $post->id }}" class="btn btn-outline-success">Edit</a>
-                        <form action="/posts/{{ $post->id }}"
+                        <form action="/posts/delete/{{ $post->id }}"
                             method="POST"
                             onsubmit="return confirm('Are you sure to delete?')">
                             @method('DELETE')
@@ -71,7 +88,6 @@
             @else
                 No post.
             @endif
-            
 
             {{ $posts->links() }}
         </div>

@@ -12,11 +12,11 @@
         <ul>
             @foreach($errors->all() as $error)
             <li style="color: red;">{{ $error }}</li>
-            @endforeach
+        @endforeach
         </ul>
         @endif --}}
 
-        <form action="/posts" method="POST">
+        <form action="/posts/store" method="POST">
             {{-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}
             @csrf
 
@@ -34,11 +34,21 @@
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="mb-3">
+                @if($categories->count())
+                <select class="form-select" name="category[]" multiple aria-label="Default select example">
+                    <option selected>Choose Category</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+                @endif
+            </div>
             <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-outline-primary">Create</button>
                 <a href="/posts" class="btn btn-outline-secondary">Back</a>
             </div>
-            </form>
+        </form>
     </div>
-    </div>
- @endsection 
+</div>
+@endsection

@@ -4,12 +4,12 @@
 
 @section('content')
 
-    @if(session()->has('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
-         <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    @endif
+@if(session()->has('success'))
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ session('success') }}
+    <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+@endif
 <div class="card">
     <div class="card-header">
         <h3>Edit Post</h3>
@@ -19,7 +19,7 @@
         <ul>
             @foreach($errors->all() as $error)
             <li style="color: red;">{{ $error }}</li>
-            @endforeach
+        @endforeach
         </ul>
         @endif --}}
 
@@ -41,6 +41,28 @@
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+            <?php 
+                        $post_categories = App\Models\Category::select(['categories.id', 'categories.name'])
+                        ->whereIn('categories.id', Illuminate\Support\Facades\DB::table('category_post')
+                        ->select('category_post.category_id')
+                        ->where('category_post.post_id', $post->id))
+                        ->get();
+                    ?>
+            @if($categories->count())
+            <select class="form-select" name="category[]" multiple aria-label="Default select example">
+                <option>Choose Category</option>
+                @foreach($categories as $category)
+                    @foreach($post_categories as $post_category)
+                        
+                        @if($category->id === $post_category->id){ 
+                            <option value="{{ $category->id }}" selected>{{ $category->name }}</option> }
+                        @else { 
+                            <option value="{{ $category->id }}" >{{ $category->name }}</option> }
+                        @endif
+                    @endforeach               
+                @endforeach
+            </select>
+            @endif
 
             <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-outline-primary">Update</button>
@@ -49,4 +71,4 @@
         </form>
     </div>
 </div>
- @endsection 
+@endsection
