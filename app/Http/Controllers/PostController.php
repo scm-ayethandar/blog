@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\DB;
@@ -37,21 +38,29 @@ class PostController extends Controller
         //          ->join('users', 'users.id', '=', 'posts.user_id')
         //          ->get()->toArray();
 
-        // $posts = Post::select(['posts.*', 'users.name as author'])
-        //          ->join('users', 'users.id', '=', 'posts.user_id')
-        //          ->orderBy('id', 'desc')
-        //          ->paginate(5);
+        $posts = Post::select(['posts.*', 'users.name as author'])
+                 ->join('users', 'users.id', '=', 'posts.user_id')
+                 ->orderBy('id', 'desc')
+                 ->paginate(5);
 
         // $posts = DB::table('posts')->join('users', 'users.id', '=', 'posts.user_id')->first();
 
-        $posts = Post::where('title', 'like', '%', $request->search, '%')->orderBy('id', 'desc')->paginate(5);
+        // $posts = Post::where('title', 'like', '%', $request->search, '%')->orderBy('id', 'desc')->paginate(5);
+
+        // $posts = Post::select(['posts.*', 'categories.name as category'])
+        //          ->join('category_post', 'category_post.post_id', '=', 'posts.id')
+        //          ->join('categories', 'categories.id', '=', 'category_post.category_id')
+        //          ->orderBy('id', 'desc')
+        //          ->paginate(5);
 
         return view('posts.index', compact('posts'));
     }
 
     public function create()
     {
-        return view('posts.create');
+        $categories = Category::all();
+
+        return view('posts.create', compact('categories'));
     }
 
     public function store(PostRequest $request)
@@ -68,18 +77,23 @@ class PostController extends Controller
             ->withInput();
         }
 
-        // $post = new Post();
-        // $post->title = request('title');
-        // $post->body = request('body');
-        // $post->created_at = now();
-        // $post->updated_at = now();
-        // $post->save();
+        $post = new Post();
+        $post->title = request('title');
+        $post->body = request('body');
+        $post->user_id = Auth::id();
+        $post->created_at = now();
+        $post->updated_at = now();
+        $post->save();
 
-        Post::create([
-            'title' => $request->title,
-            'body' => $request->body,
-            'user_id' =>Auth::id(),  //auth()->id()
-        ]);
+        // Post::create([
+        //     'title' => $request->title,
+        //     'body' => $request->body,
+        //     'user_id' =>Auth::id(),  //auth()->id()
+        // ]);
+        foreach($request->category as $category)
+        {
+            DB::insert('insert into category_post (post_id, category_id) values (?,?)', [$post->id,$category]);
+        }
 
         // $request->session()->flash('success', 'A post was created successfully.');
         session()->flash('success', 'A post was created successfully.');
@@ -97,6 +111,7 @@ class PostController extends Controller
     public function edit($id)
     {
         // $post = Post::find($id);
+        $categories = Category::all();
 
         $post = Post::select(['posts.*', 'users.name as author'])
                 ->join('users', 'user_id', 'posts.user_id')
@@ -107,24 +122,36 @@ class PostController extends Controller
                 // ->join('users', 'user_id', 'posts.user_id')
                 // ->find($id);
 
-        return view('posts.edit', compact('post'));
+        return view('posts.edit', compact('post', 'categories'));
     }
 
     public function update(PostRequest $request, $id)
     {
+
+        // dd($request);
         
         $post = Post::find($id);
-        // $post->title = request('title');
-        // $post->body = request('body');
-        // $post->updated_at = now();
-        // $post->save();
+
+        DB::table('category_post')
+            ->where('category_post.post_id', $id)
+            ->delete();
+
+        $post->title = request('title');
+        $post->body = request('body');
+        $post->updated_at = now();
+        $post->save();
+
+        foreach($request->category as $category)
+        {
+            DB::insert('insert into category_post (post_id, category_id) values (?,?)', [$post->id,$category]);
+        }
 
         // $post->update([
         //     'title' => $request->title,
         //     'body' => $request->body,
         // ]);
 
-        $post->update($request->only(['title', 'body']));
+        // $post->update($request->only(['title', 'body']));
 
         // session()->flash('success', 'A post was updated successfully.');
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisterController;
@@ -31,6 +32,14 @@ Route::patch('/posts/{id}', [PostController::class, 'update']);
 
 Route::get('/posts/{id}', [PostController::class, 'show']);
 Route::delete('/posts/delete/{id}', [PostController::class, 'destroy'])->middleware('myauth');
+
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/create', [CategoryController::class, 'create']);
+Route::post('/categories/store', [CategoryController::class, 'store']);
+
+Route::get('/categories/edit/{id}', [CategoryController::class, 'edit']);
+Route::put('/categories/{id}', [CategoryController::class, 'update']);
+Route::delete('/categories/delete/{id}', [CategoryController::class, 'destroy']);
 
 // Route::resource('posts', PostController::class);
 // Route::get('master', function)
