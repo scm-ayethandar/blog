@@ -22,7 +22,7 @@ use App\Http\Controllers\MyPostController;
 //     \App\Models\Post::factory(3)->create();
 // });
 
-Route::get('/posts', [PostController::class, 'index']);
+Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::get('/posts/create', [PostController::class, 'create'])->middleware('myauth');
 Route::post('/posts/store', [PostController::class, 'store'])->middleware('myauth');
 
@@ -31,18 +31,17 @@ Route::put('/posts/{id}', [PostController::class, 'update'])->middleware('myauth
 Route::patch('/posts/{id}', [PostController::class, 'update']);
 
 Route::get('/posts/{id}', [PostController::class, 'show']);
-Route::delete('/posts/delete/{id}', [PostController::class, 'destroy'])->middleware('myauth');
+Route::delete('/posts/{id}', [PostController::class, 'destroy'])->middleware('myauth');
 
-Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/categories/create', [CategoryController::class, 'create']);
-Route::post('/categories/store', [CategoryController::class, 'store']);
-
-Route::get('/categories/edit/{id}', [CategoryController::class, 'edit']);
-Route::put('/categories/{id}', [CategoryController::class, 'update']);
-Route::delete('/categories/delete/{id}', [CategoryController::class, 'destroy']);
+Route::get('/categories', [CategoryController::class, 'index'])->name('cateogry.index');
+Route::get('/categories/create', [CategoryController::class, 'create'])->name('cateogry.create');
+Route::post('/categories', [CategoryController::class, 'store'])->name('cateogry.store');
+Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('cateogry.edit');
+Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('cateogry.update');
+Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('cateogry.destroy');
 
 // Route::resource('posts', PostController::class);
-// Route::get('master', function)
+
 Route::get('register', [RegisterController::class, 'create']);
 Route::post('register', [RegisterController::class, 'store']);
 
