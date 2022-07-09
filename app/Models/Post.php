@@ -13,10 +13,11 @@ class Post extends Model
 {
     use HasFactory;
 
-    // protected $fillable = [
-    //     'title',
-    //     'body',
-    // ];
+    protected $fillable = [
+        'title',
+        'body',
+        'image',
+    ];
 
     protected $guarded = []; 
 
@@ -36,6 +37,16 @@ class Post extends Model
         // return $this->belongsTo(User::class, 'user_id', 'id');
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
+    }
+
+    // public function __call($name, $parameters)
+    // {
+    //     return $name()->get();
+    // }
 
     // public function categories()
     // {

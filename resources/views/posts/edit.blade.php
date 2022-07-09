@@ -35,19 +35,35 @@
                 @enderror
             </div>
             <div class="mb-3">
+                <label class="form-label">Post Cateory</label>
+                <select name="category_ids[]" class="form-select @error('category_ids') is-invalid @enderror" multiple>
+                    <option value="">-- select --</option>
+                    @foreach ($categories as $category)
+                    <option value="{{ $category->id }}" 
+                        @if (in_array($category->id, old('category_ids', $oldCategoryIds)))
+                            selected
+                        @endif
+                        >{{ $category->name }}</option>
+                    @endforeach
+                </select>
+                @error('category_ids')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3">
                 <label class="form-label">Post Body</label>
                 <textarea class="form-control  @error('body') is-invalid @enderror" name="body" rows="5">{{ $post->body }}</textarea>
                 @error('body')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-            <?php 
+            <!-- @php 
                         $post_categories = App\Models\Category::select(['categories.id', 'categories.name'])
                         ->whereIn('categories.id', Illuminate\Support\Facades\DB::table('category_post')
                         ->select('category_post.category_id')
                         ->where('category_post.post_id', $post->id))
                         ->get();
-                    ?>
+                    @endphp
             @if($categories->count())
             <select class="form-select" name="category[]" multiple aria-label="Default select example">
                 <option>Choose Category</option>
@@ -62,7 +78,7 @@
                     @endforeach               
                 @endforeach
             </select>
-            @endif
+            @endif -->
 
             <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-outline-primary">Update</button>

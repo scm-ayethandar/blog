@@ -10,20 +10,9 @@
                     <h3>Edit a category</h3>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('category.update', $category->id) }}" method="POST">
-                        @csrf
+                    <form action="{{ route('category.update', ['id' => $category->id]) }}" method="POST">
+                        @include('categories._form')
                         @method('PUT')
-                        <div class="mb-3">
-                            <label class="form-label">Name</label>
-                            <input 
-                            class="form-control @error('name') is-invalid @enderror"
-                             type="text" 
-                             name="name"
-                             value="{{ old('name', $category->name) }}">
-                            @error('name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
 
                         <div class="d-flex justify-content-between">
                             <button type="submit" class="btn btn-outline-primary">Update</button>
