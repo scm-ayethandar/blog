@@ -16,7 +16,7 @@
         </ul>
         @endif --}}
 
-        <form action="/register" method="POST">
+        <form action="{{ route('register.store') }}" method="POST">
             {{-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}
             @csrf
 
@@ -45,7 +45,7 @@
         
             <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-outline-primary">Register</button>
-                <a href="/posts" class="btn btn-outline-secondary">Back</a>
+                <a href="{{ route('posts.index') }}" class="btn btn-outline-secondary">Back</a>
             </div>
             </form>
     </div>

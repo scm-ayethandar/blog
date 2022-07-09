@@ -19,7 +19,7 @@
         </ul>
         @endif --}}
 
-        <form action="/login" method="POST">
+        <form action="{{ route('login.store') }}" method="POST">
             {{-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}
             @csrf
 
@@ -40,7 +40,7 @@
         
             <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-outline-primary">Login</button>
-                <a href="/posts" class="btn btn-outline-secondary">Back</a>
+                <a href="{{ route('posts.index') }}" class="btn btn-outline-secondary">Back</a>
             </div>
             </form>
     </div>

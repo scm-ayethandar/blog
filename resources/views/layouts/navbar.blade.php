@@ -13,13 +13,13 @@
                 </li>
                 @auth
                 <li class="nav-item">
-                <a class="nav-link @if( request()->path() == 'posts/create') active @endif" href="/posts/create">Create a Post</a>
+                <a class="nav-link @if( request()->path() == 'posts/create') active @endif" href="{{ route('posts.create') }}">Create a Post</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link @if( request()->path() == 'categories/create') active @endif" href="{{ route('cateogry.create') }}">Create a category</a>
+                <a class="nav-link @if( request()->path() == 'categories/create') active @endif" href="{{ route('category.create') }}">Create a category</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link @if( request()->path() == 'my-posts') active @endif" href="/my_posts">My Posts</a>
+                    <a class="nav-link @if( request()->path() == 'my-posts') active @endif" href="{{ route('my_posts.index') }}">My Posts</a>
                 </li>
                 @endauth
                 @if(Auth::check())
@@ -29,15 +29,18 @@
                         {{ Auth::user()->name }}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                        <li><button type="submit" class="dropdown-item" >Logout</a></li>
+                        </form>
                     </ul>
                 </li>
                 @else
                 <li class="nav-item">
-                    <a class="nav-link" href="/register">Register</a>
+                    <a class="nav-link" href="{{ route('register.create') }}">Register</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/login">Login</a>
+                    <a class="nav-link" href="{{ route('login.create') }}">Login</a>
                 </li>
                 @endif
             </ul>

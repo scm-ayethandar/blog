@@ -49,7 +49,7 @@ class CategoryController extends Controller
         ]);
 
         if($validator->fails()) {
-            return redirect('/categories/create')
+            return redirect(route('category.create'))
             ->withErrors($validator)
             ->withInput();
         }
@@ -65,7 +65,7 @@ class CategoryController extends Controller
         $category->updated_at = now();
         $category->save();
 
-        return redirect('categories')->with('success', 'A category was created successfully.');
+        return redirect(route('category.index'))->with('success', 'A category was created successfully.');
     }
 
     public function edit($id)
@@ -101,7 +101,7 @@ class CategoryController extends Controller
             $category->updated_at = now();
             $category->save();
 
-            return redirect('categories')->with('success', 'A category was updated successfully.');
+            return redirect(route('category.index'))->with('success', 'A category was updated successfully.');
     }
 
     public function destroy($id)

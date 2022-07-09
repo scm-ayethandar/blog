@@ -37,8 +37,8 @@
                         <div>
                             @if($post->isOwnPost())
                             <div class="d-flex justify-content-end">
-                                <a href="/posts/edit/{{ $post->id }}" class="btn btn-outline-success">Edit</a>
-                                <form action="/posts/{{ $post->id }}"
+                                <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-outline-success">Edit</a>
+                                <form action="{{ route('posts.destroy', $post->id) }}"
                                     method="POST"
                                     onsubmit="return confirm('Are you sure to delete?')">
                                     @method('DELETE')

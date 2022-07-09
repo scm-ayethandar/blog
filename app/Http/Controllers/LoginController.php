@@ -24,7 +24,7 @@ class LoginController extends Controller
         ]);
 
         if($validator->fails()) {
-            return redirect('/login')
+            return redirect(route('login.create'))
             ->withErrors($validator)
             ->withInput();
         }
@@ -36,7 +36,7 @@ class LoginController extends Controller
             throw ValidationException::withMessages([
                 'email' =>"The email is not registered."
             ]);
-            return redirect('login');
+            return redirect(route('login.create'));
         }
 
         $credentials = [
@@ -49,10 +49,10 @@ class LoginController extends Controller
                 'email' =>"The email or password is incorrect."
             ]);
 
-            return redirect('login');
+            return redirect(route('login.create'));
         } 
         
-        return redirect('posts');
+        return redirect(route('posts.index'));
         
     }
 
@@ -60,6 +60,6 @@ class LoginController extends Controller
     {
         Auth::logout();
 
-        return redirect('posts');
+        return redirect(route('posts.index'));
     }
 }
