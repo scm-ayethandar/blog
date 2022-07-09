@@ -72,7 +72,7 @@ class PostController extends Controller
         ]);
 
         if($validator->fails()) {
-            return redirect('/posts/create')
+            return redirect(route('posts.create'))
             ->withErrors($validator)
             ->withInput();
         }
@@ -98,7 +98,7 @@ class PostController extends Controller
         // $request->session()->flash('success', 'A post was created successfully.');
         session()->flash('success', 'A post was created successfully.');
 
-        return redirect('/posts');
+        return redirect(route('posts.index'));
     }
 
     public function show($id)
@@ -156,7 +156,7 @@ class PostController extends Controller
         // session()->flash('success', 'A post was updated successfully.');
 
         // return "Updated post";
-        return redirect('/posts')->with('success', 'A post was updated successfully.');
+        return redirect(route('posts.index'))->with('success', 'A post was updated successfully.');
     }
 
     public function destroy($id)
@@ -164,7 +164,7 @@ class PostController extends Controller
         Post::destroy($id);
 
         // return "Deleted Post";
-        return redirect('/posts')->with('success', 'A post was deleted.');
+        return redirect(route('posts.index'))->with('success', 'A post was deleted.');
     }
 
 }

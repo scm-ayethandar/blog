@@ -12,7 +12,7 @@
         <p>Post by <b>{{ $post->author->name }}</b> on <i>{{$post->created_at->format('M d, Y')}}</i></p>
         <p>{{ $post->body }}</p>
 
-        <a href="/posts" class="btn btn-outline-secondary">Go Home</a>
+        <a href="{{ route('posts.index') }}" class="btn btn-outline-secondary">Go Home</a>
     </div>
 </div>
 
