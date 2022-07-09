@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Category;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -25,6 +26,8 @@ class DatabaseSeeder extends Seeder
 
     $this->call(\Database\Seeders\UserSeeder::class);
     $this->call(\Database\Seeders\PostSeeder::class);
+    Category::factory(5)->create();
+
 
         // \App\Models\User::factory(10)->create();
 

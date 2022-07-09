@@ -38,10 +38,12 @@ class PostController extends Controller
         //          ->join('users', 'users.id', '=', 'posts.user_id')
         //          ->get()->toArray();
 
-        $posts = Post::select(['posts.*', 'users.name as author'])
-                 ->join('users', 'users.id', '=', 'posts.user_id')
-                 ->orderBy('id', 'desc')
-                 ->paginate(5);
+        $posts = Post::where('title', 'like', '%' . $request->search . '%')->orderBy('id', 'desc')->paginate(3);
+
+        // $posts = Post::select(['posts.*', 'users.name as author'])
+        //          ->join('users', 'users.id', '=', 'posts.user_id')
+        //          ->orderBy('id', 'desc')
+        //          ->paginate(5);
 
         // $posts = DB::table('posts')->join('users', 'users.id', '=', 'posts.user_id')->first();
 
@@ -66,34 +68,51 @@ class PostController extends Controller
     public function store(PostRequest $request)
     { 
 
-        $validator = Validator::make($request->all(), [
-            'title' => 'required',
-            'body' => 'required',
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'title' => 'required',
+        //     'body' => 'required',
+        // ]);
 
-        if($validator->fails()) {
-            return redirect(route('posts.create'))
-            ->withErrors($validator)
-            ->withInput();
-        }
+        // if($validator->fails()) {
+        //     return redirect(route('posts.create'))
+        //     ->withErrors($validator)
+        //     ->withInput();
+        // }
 
-        $post = new Post();
-        $post->title = request('title');
-        $post->body = request('body');
-        $post->user_id = Auth::id();
-        $post->created_at = now();
-        $post->updated_at = now();
-        $post->save();
+        // $post = new Post();
+        // $post->title = request('title');
+        // $post->body = request('body');
+        // $post->user_id = Auth::id();
+        // $post->created_at = now();
+        // $post->updated_at = now();
+        // $post->save();
 
-        // Post::create([
+        // $post = Post::create([
         //     'title' => $request->title,
         //     'body' => $request->body,
         //     'user_id' =>Auth::id(),  //auth()->id()
         // ]);
-        foreach($request->category as $category)
-        {
-            DB::insert('insert into category_post (post_id, category_id) values (?,?)', [$post->id,$category]);
-        }
+
+        $file = $request->file('image');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $dir = public_path('upload/images');
+        $file->move($dir, $filename);
+
+        $post = auth()->user()->posts()->create($request->only('title', 'body'));
+
+        $post->categories()->attach($request->category_ids);
+
+        // foreach($request->category_ids as $categoryId) {
+        //     DB::table('category_post')->insert([
+        //         'post_id' => $post->id,
+        //         'category_id' => $categoryId,
+        //     ]);
+        // }
+
+        // foreach($request->category as $category)
+        // {
+        //     DB::insert('insert into category_post (post_id, category_id) values (?,?)', [$post->id,$category]);
+        // }
 
         // $request->session()->flash('success', 'A post was created successfully.');
         session()->flash('success', 'A post was created successfully.');
@@ -111,18 +130,24 @@ class PostController extends Controller
     public function edit($id)
     {
         // $post = Post::find($id);
+        // $categories = Category::all();
+
+        $post = Post::find($id);
+        $oldCategoryIds = $post->categories->pluck('id')->toArray();
         $categories = Category::all();
 
-        $post = Post::select(['posts.*', 'users.name as author'])
-                ->join('users', 'user_id', 'posts.user_id')
-                ->where('posts.id', $id)
-                ->first();
+        // $post = Post::select(['posts.*', 'users.name as author'])
+        //         ->join('users', 'user_id', 'posts.user_id')
+        //         ->where('posts.id', $id)
+        //         ->first();
 
                 // $post = Post::select(['posts.*', 'users.name as author'])
                 // ->join('users', 'user_id', 'posts.user_id')
                 // ->find($id);
 
-        return view('posts.edit', compact('post', 'categories'));
+        // return view('posts.edit', compact('post', 'categories'));
+
+        return view('posts.edit', compact('post', 'categories', 'oldCategoryIds'));
     }
 
     public function update(PostRequest $request, $id)
@@ -131,20 +156,23 @@ class PostController extends Controller
         // dd($request);
         
         $post = Post::find($id);
+        $post->update($request->only(['title', 'body']));
+        $post->categories()->sync($request->category_ids);
+        return redirect('/posts')->with('success', 'A post was updated successfully.');
 
-        DB::table('category_post')
-            ->where('category_post.post_id', $id)
-            ->delete();
+        // DB::table('category_post')
+        //     ->where('category_post.post_id', $id)
+        //     ->delete();
 
-        $post->title = request('title');
-        $post->body = request('body');
-        $post->updated_at = now();
-        $post->save();
+        // $post->title = request('title');
+        // $post->body = request('body');
+        // $post->updated_at = now();
+        // $post->save();
 
-        foreach($request->category as $category)
-        {
-            DB::insert('insert into category_post (post_id, category_id) values (?,?)', [$post->id,$category]);
-        }
+        // foreach($request->category as $category)
+        // {
+        //     DB::insert('insert into category_post (post_id, category_id) values (?,?)', [$post->id,$category]);
+        // }
 
         // $post->update([
         //     'title' => $request->title,
@@ -156,7 +184,23 @@ class PostController extends Controller
         // session()->flash('success', 'A post was updated successfully.');
 
         // return "Updated post";
-        return redirect(route('posts.index'))->with('success', 'A post was updated successfully.');
+
+        // $post->update($request->only(['title', 'body']));
+
+        // $post->categories()->detach($post->categories->pluck('id')->toArray());
+        // $post->categories()->attach($request->category_ids);
+
+        // $post->categories()->sync($request->category_ids);
+
+        // DB::table('category_post')->where('post_id', $post->id)->delete();
+
+        // foreach($request->category_ids as $categoryId) {
+        //     DB::table('category_post')->insert([
+        //         'post_id' => $post->id,
+        //         'category_id' => $categoryId,
+        //     ]);
+        // }
+        // return redirect(route('posts.index'))->with('success', 'A post was updated successfully.');
     }
 
     public function destroy($id)
