@@ -93,12 +93,18 @@ class PostController extends Controller
         //     'user_id' =>Auth::id(),  //auth()->id()
         // ]);
 
+
         $file = $request->file('image');
         $filename = time() . '_' . $file->getClientOriginalName();
         $dir = public_path('upload/images');
         $file->move($dir, $filename);
 
-        $post = auth()->user()->posts()->create($request->only('title', 'body'));
+        $post = auth()->user()->posts()->create([
+            'title' => $request->title,
+            'body' => $request->body,
+            'user_id' =>Auth::id(),
+            'image' => '/upload/images/' . $filename,
+        ]);
 
         $post->categories()->attach($request->category_ids);
 
