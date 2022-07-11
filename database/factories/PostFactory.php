@@ -24,8 +24,9 @@ class PostFactory extends Factory
 
             'title' => $this->faker->text(10),
             'body' => $this->faker->text(100),
-            'user_id' => User::all(['id'])->random(),
-            'image' => '/upload/images/wp2.jpg',
+            // 'user_id' => User::all(['id'])->random(),
+            'user_id' => User::inRandomOrder()->first()->id,
+            // 'image' => '/upload/images/wp2.jpg',
             // 'user_id' => User::inRandomOrder()->first()->id,
             // 'user_id' => User::where('id', rand(1, 5))->first()->id,
             // 'user_id' => User::factory()->create()->id,

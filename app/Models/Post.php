@@ -38,6 +38,11 @@ class Post extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function images()
+    {
+        return $this->hasMany(PostImage::class);
+    }
+
     public function categories()
     {
         return $this->belongsToMany(Category::class);

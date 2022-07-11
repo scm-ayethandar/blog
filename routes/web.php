@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MyPostController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,26 @@ use App\Http\Controllers\MyPostController;
 
 // Route::get('test', function() {
 //     \App\Models\Post::factory(3)->create();
+// });
+
+// Route::get('download', function() {
+//     return Storage::disk('public')->download('a.txt');
+// });
+
+// Route::get('/files', function() {
+//     return Storage::files('my_dir');
+// });
+
+// Route::get('/file/create', function() {
+//     Storage::disk('public')->put('my_dir/a.txt', 'apple');
+// });
+
+// Route::get('/file/read', function() {
+//     return Storage::disk('public')->get('my_dir/a.txt');
+// });
+
+// Route::get('/file/delete', function() {
+//     return Storage::disk('public')->delete('my_dir/a.txt');
 // });
 
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
