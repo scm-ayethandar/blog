@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MyPostController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RegisterController;
 
@@ -53,6 +54,10 @@ Route::patch('/posts/{id}', [PostController::class, 'update'])->name('posts.upda
 
 Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
 Route::delete('/posts/{id}', [PostController::class, 'destroy'])->middleware('myauth')->name('posts.destroy');
+
+
+Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::put('/profile/{id}', [ProfileController::class, 'update'])->name('profile.update');
 
 // Route::get('/categories', [CategoryController::class, 'index'])->name('category.index');
 // Route::get('/categories/create', [CategoryController::class, 'create'])->name('category.create');

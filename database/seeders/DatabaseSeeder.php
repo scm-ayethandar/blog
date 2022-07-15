@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'mgmg@gmail.com',
             // 'password' => Hash::make('123123'),
             'password' => bcrypt('123123'),
+            'image_path' => 'images\avatar.png',
         ]);
 
     $this->call(\Database\Seeders\UserSeeder::class);
