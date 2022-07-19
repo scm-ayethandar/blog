@@ -78,3 +78,14 @@ Route::post('login', [LoginController::class, 'store'])->name('login.store');
 Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
 
 Route::get('/my_posts', [MyPostController::class, 'index'])->name('my_posts.index');
+
+Route::get('collection', function() {
+    $arr = collect([1, 6, 3, 4]);
+
+    // dd($arr->sortDesc()->all());
+    $arr = $arr->map(function($a) {
+        return $a + 1;
+    });
+
+    dd($arr);
+});

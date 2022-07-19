@@ -76,6 +76,7 @@
             @else
             <p>No Post.</p>
             @endif
+            {{ $posts->links() }}
         </div>
         <!-- Sidebar -->
         <div class="col-md-4">

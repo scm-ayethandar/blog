@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Post;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -43,6 +44,15 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function photo()
+    {
+        if($this->image_path) {
+            return Storage::url($this->image_path);
+        }
+        return url('/images/avatar.png');
+    }
+    
 
     public function posts()
     {

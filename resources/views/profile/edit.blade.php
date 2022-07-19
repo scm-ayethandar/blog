@@ -21,9 +21,10 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    @if(Auth::user()->image_path)
+                    <img class="profile" src="{{ auth()->user()->photo() }}" alt="Profile Image">
+                    <!-- @if(Auth::user()->image_path)
                     <img src="{{ Storage::url(Auth::user()->image_path) }}" alt="Post Image">
-                    @endif
+                    @endif -->
                     <div class="mb-3">
                         <label class="form-label">Name</label>
                         <input class="form-control @error('name') is-invalid @enderror" type="text" name="name" value="{{ old('name', Auth::user()->name) }}">

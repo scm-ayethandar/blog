@@ -67,6 +67,9 @@ class CategoryController extends Controller
         $category->save();
 
         return redirect(route('category.index'))->with('success', 'A category was created successfully.');
+        return to_route('category.index')->with('success', 'A category was created successfully.');
+        // return redirect()->to('category.index')->with('success', 'A category was created successfully.');
+    
     }
 
     public function edit($id)
